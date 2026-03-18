@@ -1,0 +1,87 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.0
+  snyk: snyk/snyk@1.0.0
+
+jobs:
+  build:
+    docker:
+      - image: cimg/node:18.0
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: cd appcode && npm install
+
+  test:
+    docker:
+      - image: cimg/node:18.0
+    steps:
+      - checkout
+      - run:
+          name: Run tests
+          command: cd appcode && npm test -- --watchAll=false
+
+sonar:
+  docker:
+    - image: cimg/node:18.0
+  steps:
+    - checkout
+
+    - run:
+        name: Install Sonar Scanner
+        command: npm install -g sonarqube-scanner
+
+    - run:
+        name: SonarCloud Scan
+        command: |
+          cd appcode
+          sonar-scanner \
+            -Dsonar.projectKey=Jenish9_todo-app-react-gitops-eks-argocd \
+            -Dsonar.organization=jenish9 \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=$SONAR_TOKEN
+
+  security:
+    docker:
+      - image: cimg/node:18.0
+    steps:
+      - checkout
+      - snyk/scan:
+          command: test
+          project-path: appcode
+
+docker:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build & Push Docker Image
+          command: |
+            cd appcode
+            docker build -t $DOCKER_USERNAME/todo-app:latest .
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+            docker push $DOCKER_USERNAME/todo-app:latest
+
+workflows:
+  version: 2
+  pipeline:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - sonar:
+          requires:
+            - test
+      - security:
+          requires:
+            - test
+      - docker:
+          requires:
+            - sonar
+            - security
