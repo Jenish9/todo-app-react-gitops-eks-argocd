@@ -1,0 +1,97 @@
+version: 2.1
+
+orbs:
+  sonarcloud: sonarsource/sonarcloud@2.0.0
+
+jobs:
+  build:
+    docker:
+      - image: cimg/node:18.0
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            cd Automating-Deployment-of-a-Dockerized-ToDo-App-on-AWS-EKS-Using-GitOps-and-ArgoCD/appcode
+            npm install
+            npm run build || true
+
+  test:
+    docker:
+      - image: cimg/node:18.0
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            cd Automating-Deployment-of-a-Dockerized-ToDo-App-on-AWS-EKS-Using-GitOps-and-ArgoCD/appcode
+            npm install
+      - run:
+          name: Run tests
+          command: |
+            cd Automating-Deployment-of-a-Dockerized-ToDo-App-on-AWS-EKS-Using-GitOps-and-ArgoCD/appcode
+            npm test -- --watchAll=false
+
+  snyk_scan:
+    docker:
+      - image: cimg/node:18.18
+    steps:
+      - checkout
+      - run:
+          name: Check Snyk Token
+          command: echo $SNYK_TOKEN
+    
+      - run:
+          name: Run Snyk Scan
+          command: |
+            cd Automating-Deployment-of-a-Dockerized-ToDo-App-on-AWS-EKS-Using-GitOps-and-ArgoCD/appcode
+            npx snyk auth $SNYK_TOKEN
+            npx snyk test --severity-threshold=critical
+
+           
+  
+  sonar:
+    docker:
+      - image: cimg/node:18.0
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            cd Automating-Deployment-of-a-Dockerized-ToDo-App-on-AWS-EKS-Using-GitOps-and-ArgoCD/appcode
+            npm install
+     
+  docker:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build & Push Docker Image
+          command: |
+            cd Automating-Deployment-of-a-Dockerized-ToDo-App-on-AWS-EKS-Using-GitOps-and-ArgoCD/appcode
+            docker build -t $DOCKER_USERNAME/todo-app:latest .
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+            docker push $DOCKER_USERNAME/todo-app:latest
+
+workflows:
+  version: 2
+  pipeline:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+
+      - snyk_scan: 
+          requires: 
+            - test   
+
+      - sonar:
+          requires:
+            - snyk_scan
+          context: SonarCloud
+      - docker:
+          requires:
+            - sonar
