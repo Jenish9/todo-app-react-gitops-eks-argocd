@@ -17,4 +17,4 @@ spec:
         - name: todo-app
           image: jenish48/todo-app:latest
           ports:
-            - containerPort: 3000
+            - containerPort: 80
