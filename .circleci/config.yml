@@ -71,9 +71,40 @@ jobs:
           name: Build & Push Docker Image
           command: |
             cd Automating-Deployment-of-a-Dockerized-ToDo-App-on-AWS-EKS-Using-GitOps-and-ArgoCD/appcode
-            docker build -t $DOCKER_USERNAME/todo-app:latest .
+            docker build -t $DOCKER_USERNAME/todo-app:$CIRCLE_SHA1 .
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-            docker push $DOCKER_USERNAME/todo-app:latest
+            docker push $DOCKER_USERNAME/todo-app:$CIRCLE_SHA1
+
+  update-manifest:
+    docker:
+      - image: cimg/base
+    steps:
+      - checkout
+
+      - run:
+          name: Install yq
+          command: |
+            sudo apt update
+            sudo apt install -y jq
+            wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O yq
+            chmod +x yq
+            sudo mv yq /usr/local/bin/
+
+      - run:
+          name: Update deployment.yaml
+          command: |
+            cd k8s  
+            yq e '.spec.template.spec.containers[0].image = "'$DOCKER_USERNAME'/todo-app:'"$CIRCLE_SHA1"'"' -i deployment.yaml
+
+      - run:
+          name: Commit & Push changes
+          command: |
+            git config --global user.email "ci@circleci.com"
+            git config --global user.name "circleci"
+            git add .
+            git commit -m "Update image to $CIRCLE_SHA1" || echo "No changes"
+            git push https://$GITHUB_TOKEN@github.com/Jenish9/todo-app-react-gitops-eks-argocd.git main
+
 
 workflows:
   version: 2
@@ -95,3 +126,7 @@ workflows:
       - docker:
           requires:
             - sonar
+
+      - update-manifest:
+           requires: 
+            - docker
