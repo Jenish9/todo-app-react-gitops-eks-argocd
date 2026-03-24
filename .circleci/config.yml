@@ -102,7 +102,7 @@ jobs:
             git config --global user.email "ci@circleci.com"
             git config --global user.name "circleci"
             git add .
-            git commit -m "Update image to $CIRCLE_SHA1" || echo "No changes"
+            git commit -m "Update image to $CIRCLE_SHA1 [skip ci]" || echo "No changes"
             git push https://$GITHUB_TOKEN@github.com/Jenish9/todo-app-react-gitops-eks-argocd.git main
 
 
