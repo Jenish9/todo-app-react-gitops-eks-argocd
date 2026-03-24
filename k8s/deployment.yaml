@@ -2,19 +2,24 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todo-app
-  namespace: default   
+  namespace: default
+
 spec:
   replicas: 2
+
   selector:
     matchLabels:
       app: todo-app
+
   template:
     metadata:
       labels:
         app: todo-app
-  spec:
+
+    spec:
       containers:
         - name: todo-app
           image: jenish48/todo-app:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
