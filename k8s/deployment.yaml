@@ -3,23 +3,19 @@ kind: Deployment
 metadata:
   name: todo-app
   namespace: default
-
 spec:
   replicas: 2
-
   selector:
     matchLabels:
       app: todo-app
-
   template:
     metadata:
       labels:
         app: todo-app
-
     spec:
       containers:
         - name: todo-app
-          image: jenish48/todo-app:latest
+          image: jenish48/todo-app:c4e6a42cd16c24d2396ee450874f30f841b0baca
           imagePullPolicy: Always
           ports:
             - containerPort: 80
