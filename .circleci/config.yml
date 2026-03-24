@@ -77,7 +77,7 @@ jobs:
 
   update-manifest:
     docker:
-      - image: cimg/base
+      - image: cimg/base:stable
     steps:
       - checkout
 
