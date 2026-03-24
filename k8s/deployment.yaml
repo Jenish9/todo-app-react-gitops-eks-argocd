@@ -12,7 +12,7 @@ spec:
     metadata:
       labels:
         app: todo-app
-    spec:
+  spec:
       containers:
         - name: todo-app
           image: jenish48/todo-app:latest
