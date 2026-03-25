@@ -47,7 +47,12 @@ jobs:
             cd Automating-Deployment-of-a-Dockerized-ToDo-App-on-AWS-EKS-Using-GitOps-and-ArgoCD/appcode
             npx snyk auth $SNYK_TOKEN
             npx snyk test --severity-threshold=critical
-
+      - run:
+          name: Snyk Test Backend
+          command: |
+            cd backend
+            npx snyk auth $SNYK_TOKEN
+            npx snyk test --severity-threshold=critical
            
   
   sonar:
@@ -60,7 +65,11 @@ jobs:
           command: |
             cd Automating-Deployment-of-a-Dockerized-ToDo-App-on-AWS-EKS-Using-GitOps-and-ArgoCD/appcode
             npm install
-     
+      - run:
+          name: Move to project root
+          command: |
+            cd ../..
+      - sonarcloud/scan
   docker:
     docker:
       - image: cimg/base:stable
