@@ -8,9 +8,10 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import ListGroup from "react-bootstrap/ListGroup";
 
-/* const API_URL = "http://localhost:5000"; // change later for k8s */
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+/* const API_URL = "http://localhost:5000"; // change later for k8s 
 const API_URL = "http://host.docker.internal:5000";
-
+*/
 class App extends Component {
   constructor(props) {
     super(props);

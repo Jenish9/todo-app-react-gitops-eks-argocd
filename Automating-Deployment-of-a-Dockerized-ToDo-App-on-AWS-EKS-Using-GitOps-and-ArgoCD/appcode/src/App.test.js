@@ -3,6 +3,6 @@ import App from './App';
 
 test('renders todo title', () => {
   render(<App />);
-  const titleElement = screen.getByText(/todo list/i);
+  const titleElement = screen.getByText(/todo app/i);
   expect(titleElement).toBeInTheDocument();
 });
