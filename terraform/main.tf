@@ -20,3 +20,11 @@ module "eks" {
   subnet_ids = module.vpc.private_subnets
   
 }
+
+module "storage" {
+  source = "./modules/storage"
+
+  bucket_name = "jenish-devops-app-2026"
+  table_name  = "my-app-table"
+  environment = "production"
+}

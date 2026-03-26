@@ -115,7 +115,7 @@ jobs:
           command: |
             cd k8s  
             yq e '.spec.template.spec.containers[0].image = "'$DOCKER_USERNAME'/todo-app-frontend:'"$CIRCLE_SHA1"'"' -i deployment.yaml
-            yq e '.spec.template.spec.containers[0].image = "'$DOCKER_USERNAME'/todo-app-backend:'"$CIRCLE_SHA1"'"' -i deployment.yaml
+            yq e '.spec.template.spec.containers[0].image = "'$DOCKER_USERNAME'/todo-app-backend:'"$CIRCLE_SHA1"'"' -i backend-deployment.yaml
       - run:
           name: Commit & Push changes
           command: |
