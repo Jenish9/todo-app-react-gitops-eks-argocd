@@ -15,6 +15,12 @@ jobs:
             cd Automating-Deployment-of-a-Dockerized-ToDo-App-on-AWS-EKS-Using-GitOps-and-ArgoCD/appcode
             npm install
             npm run build || true
+        
+      - run:
+          name: Install Backend
+          command: |
+            cd backend
+            npm install
 
   test:
     docker:
@@ -78,9 +84,16 @@ jobs:
           name: Build & Push Docker Image
           command: |
             cd Automating-Deployment-of-a-Dockerized-ToDo-App-on-AWS-EKS-Using-GitOps-and-ArgoCD/appcode
-            docker build -t $DOCKER_USERNAME/todo-app:$CIRCLE_SHA1 .
+            docker build -t $DOCKER_USERNAME/todo-app-frontend:$CIRCLE_SHA1 .
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-            docker push $DOCKER_USERNAME/todo-app:$CIRCLE_SHA1
+            docker push $DOCKER_USERNAME/todo-app-frontend:$CIRCLE_SHA1
+      - run:
+          name: Build & Push Docker Image
+          command: |
+            cd backend
+            docker build -t $DOCKER_USERNAME/todo-app-backend:$CIRCLE_SHA1 .
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+            docker push $DOCKER_USERNAME/todo-app-backend:$CIRCLE_SHA1
 
   update-manifest:
     docker:
@@ -101,8 +114,8 @@ jobs:
           name: Update deployment.yaml
           command: |
             cd k8s  
-            yq e '.spec.template.spec.containers[0].image = "'$DOCKER_USERNAME'/todo-app:'"$CIRCLE_SHA1"'"' -i deployment.yaml
-
+            yq e '.spec.template.spec.containers[0].image = "'$DOCKER_USERNAME'/todo-app-frontend:'"$CIRCLE_SHA1"'"' -i deployment.yaml
+            yq e '.spec.template.spec.containers[0].image = "'$DOCKER_USERNAME'/todo-app-backend:'"$CIRCLE_SHA1"'"' -i deployment.yaml
       - run:
           name: Commit & Push changes
           command: |
