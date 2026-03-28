@@ -20,5 +20,5 @@ spec:
           ports:
             - containerPort: 80
           env:
-            - name: REACT_APP_API_URL
-              value: "http://backend-service:3000"
+             - name: REACT_APP_API_URL
+               value: "http://a444212d28bcb4b7586a9db108e1fd0e-824428340.ap-south-1.elb.amazonaws.com"
