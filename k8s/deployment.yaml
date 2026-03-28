@@ -15,10 +15,10 @@ spec:
     spec:
       containers:
         - name: todo-app
-          image: jenish48/todo-app-frontend:40162566f7aee14160ec709721bed76d0f36b67c
+          image: jenish48/todo-app-frontend:ad360cfd94f78989636a84bdebe10e23bcaa348c
           imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:
-             - name: REACT_APP_API_URL
-               value: "http://a444212d28bcb4b7586a9db108e1fd0e-824428340.ap-south-1.elb.amazonaws.com"
+            - name: REACT_APP_API_URL
+              value: "http://a444212d28bcb4b7586a9db108e1fd0e-824428340.ap-south-1.elb.amazonaws.com"
