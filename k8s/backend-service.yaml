@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: todo-backend-service
 spec:
-  type: LoadBalancer   # ✅ expose outside
+  type: ClusterIP   # ✅ expose outside
   selector:
     app: backend
   ports:
