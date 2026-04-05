@@ -14,7 +14,7 @@ AWS.config.update({ region: "ap-south-1" });
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
 // ✅ CREATE TODO
-app.post("/todo", async (req, res) => {
+app.post("/api/todo", async (req, res) => {
   const { id, task } = req.body;
 
   if (LOCAL_MODE) {
@@ -31,7 +31,7 @@ app.post("/todo", async (req, res) => {
 });
 
 // ✅ GET TODOS
-app.get("/todo", async (req, res) => {
+app.get("/api/todo", async (req, res) => {
   if (LOCAL_MODE) {
     return res.json(todos);
   }
@@ -44,7 +44,7 @@ app.get("/todo", async (req, res) => {
 });
 
 // ✅ DELETE TODO
-app.delete("/todo/:id", async (req, res) => {
+app.delete("/api/todo/:id", async (req, res) => {
   const { id } = req.params;
 
   if (LOCAL_MODE) {

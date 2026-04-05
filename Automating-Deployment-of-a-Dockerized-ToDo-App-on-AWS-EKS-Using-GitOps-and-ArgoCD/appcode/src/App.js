@@ -8,10 +8,10 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import ListGroup from "react-bootstrap/ListGroup";
 
+const API_URL = ""
+/*const API_URL = process.env.REACT_APP_API_URL 
 
-const API_URL = process.env.REACT_APP_API_URL 
-
-/*|| "http://backend-service:3000";
+|| "http://backend-service:3000";
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
  const API_URL = "http://localhost:5000"; // change later for k8s 
 const API_URL = "http://host.docker.internal:5000";
@@ -31,7 +31,8 @@ class App extends Component {
   }
 
   fetchTodos() {
-    fetch(`${API_URL}/todo`)
+      fetch(`/api/todo`)
+    /*fetch(`${API_URL}/todo`)*/
       .then((res) => res.json())
       .then((data) => {
         this.setState({ list: data });
@@ -46,7 +47,7 @@ class App extends Component {
 
   addItem() {
     if (this.state.userInput !== "") {
-      fetch(`${API_URL}/todo`, {
+      fetch(`api/todo`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +64,7 @@ class App extends Component {
   }
 
   deleteItem(id) {
-    fetch(`${API_URL}/todo/${id}`, {
+    fetch(`api/todo/${id}`, {
       method: "DELETE",
     }).then(() => {
       this.fetchTodos();
