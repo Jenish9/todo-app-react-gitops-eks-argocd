@@ -40,27 +40,24 @@ class App extends Component {
     this.fetchTodos();
   }
 
-  // ✅ Fetch all todos
-  fetchTodos() {
-    fetch("/api/todo")
-      .then((res) => res.json())
-      .then((data) => {
-        this.setState({ list: data });
-      })
-      .catch((err) => console.error("Error fetching todos:", err));
+  // ✅ FIX: make async
+  async fetchTodos() {
+    const res = await fetch("/api/todo");
+    const data = await res.json();
+    this.setState({ list: data });
   }
 
-  // ✅ Update input
+  // ✅ FIX: add back this function
   updateInput(value) {
     this.setState({
       userInput: value,
     });
   }
 
-  // ✅ Add todo
-  addItem() {
+  // ✅ FIX: ONLY ONE addItem (async)
+  async addItem() {
     if (this.state.userInput.trim() !== "") {
-      fetch("/api/todo", {
+      await fetch("/api/todo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,20 +66,20 @@ class App extends Component {
           id: Date.now().toString(),
           task: this.state.userInput,
         }),
-      })
-        .then(() => this.fetchTodos()) // 🔥 refresh list automatically
-        .then(() => this.setState({ userInput: "" }))
-        .catch((err) => console.error("Error adding todo:", err));
+      });
+
+      await this.fetchTodos();  // 🔥 wait properly
+      this.setState({ userInput: "" });
     }
   }
 
-  // ✅ Delete todo
-  deleteItem(id) {
-    fetch(`/api/todo/${id}`, {
+  // ✅ FIX: async delete
+  async deleteItem(id) {
+    await fetch(`/api/todo/${id}`, {
       method: "DELETE",
-    })
-      .then(() => this.fetchTodos()) // 🔥 refresh list automatically
-      .catch((err) => console.error("Error deleting todo:", err));
+    });
+
+    await this.fetchTodos();  // 🔥 refresh properly
   }
 
   render() {
