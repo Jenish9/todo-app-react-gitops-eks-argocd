@@ -47,7 +47,7 @@ class App extends Component {
 
   addItem() {
     if (this.state.userInput !== "") {
-      fetch(`api/todo`, {
+      fetch(`/api/todo`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +64,7 @@ class App extends Component {
   }
 
   deleteItem(id) {
-    fetch(`api/todo/${id}`, {
+    fetch(`/api/todo/${id}`, {
       method: "DELETE",
     }).then(() => {
       this.fetchTodos();
