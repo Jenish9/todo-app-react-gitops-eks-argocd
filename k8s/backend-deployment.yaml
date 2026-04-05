@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: jenish48/todo-app-backend:ecb8d2bea5331428fdbbd0449c78890aa0db4240
+          image: jenish48/todo-app-backend:925863ee3617b654a05c9e5c3c634c4fdc4f5cb6
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
