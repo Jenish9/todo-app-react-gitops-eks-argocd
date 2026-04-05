@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+/*import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -9,13 +9,23 @@ import FormControl from "react-bootstrap/FormControl";
 import ListGroup from "react-bootstrap/ListGroup";
 
 const API_URL = ""
-/*const API_URL = process.env.REACT_APP_API_URL 
+const API_URL = process.env.REACT_APP_API_URL 
 
 || "http://backend-service:3000";
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
  const API_URL = "http://localhost:5000"; // change later for k8s 
 const API_URL = "http://host.docker.internal:5000";
 */
+import React, { Component } from "react";
+import "bootstrap/dist/css/bootstrap.css";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import InputGroup from "react-bootstrap/InputGroup";
+import FormControl from "react-bootstrap/FormControl";
+import ListGroup from "react-bootstrap/ListGroup";
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -30,24 +40,27 @@ class App extends Component {
     this.fetchTodos();
   }
 
+  // ✅ Fetch all todos
   fetchTodos() {
-      fetch(`/api/todo`)
-    /*fetch(`${API_URL}/todo`)*/
+    fetch("/api/todo")
       .then((res) => res.json())
       .then((data) => {
         this.setState({ list: data });
-      });
+      })
+      .catch((err) => console.error("Error fetching todos:", err));
   }
 
+  // ✅ Update input
   updateInput(value) {
     this.setState({
       userInput: value,
     });
   }
 
+  // ✅ Add todo
   addItem() {
-    if (this.state.userInput !== "") {
-      fetch(`/api/todo`, {
+    if (this.state.userInput.trim() !== "") {
+      fetch("/api/todo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,19 +69,20 @@ class App extends Component {
           id: Date.now().toString(),
           task: this.state.userInput,
         }),
-      }).then(() => {
-        this.fetchTodos();
-        this.setState({ userInput: "" });
-      });
+      })
+        .then(() => this.fetchTodos()) // 🔥 refresh list automatically
+        .then(() => this.setState({ userInput: "" }))
+        .catch((err) => console.error("Error adding todo:", err));
     }
   }
 
+  // ✅ Delete todo
   deleteItem(id) {
     fetch(`/api/todo/${id}`, {
       method: "DELETE",
-    }).then(() => {
-      this.fetchTodos();
-    });
+    })
+      .then(() => this.fetchTodos()) // 🔥 refresh list automatically
+      .catch((err) => console.error("Error deleting todo:", err));
   }
 
   render() {
