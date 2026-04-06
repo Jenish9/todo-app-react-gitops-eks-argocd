@@ -12,6 +12,7 @@ spec:
       labels:
         app: backend
     spec:
+      serviceAccountName: backend-sa
       containers:
         - name: backend
           image: jenish48/todo-app-backend:a062acb91a7057b93ad2249b63fe900daf6cdefe
