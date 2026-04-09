@@ -48,7 +48,7 @@ app.get("/api/todo", async (req, res) => {
     console.log("Fetching todos from DynamoDB...");
 
     const data = await dynamo.scan({
-      TableName: "my-app--table",
+      TableName: "my-app-table",
     }).promise();
 
     res.json(data.Items);
