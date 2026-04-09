@@ -4,6 +4,7 @@ terraform/.terraform/
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+*.exe
 
 # Node
 node_modules/
