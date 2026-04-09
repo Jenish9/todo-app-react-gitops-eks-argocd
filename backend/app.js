@@ -24,7 +24,7 @@ app.post("/api/todo", async (req, res) => {
   }
 
   await dynamo.put({
-    TableName: "todo-table",
+    TableName: "my-app-table",
     Item: { id, task, status: "pending" },
   }).promise();
 
