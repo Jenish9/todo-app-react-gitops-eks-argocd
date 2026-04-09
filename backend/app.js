@@ -45,7 +45,7 @@ app.get("/api/todo", async (req, res) => {
 });*/
 app.get("/api/todo", async (req, res) => {
   try {
-    console.log("Fetching todos from DynamoDB...");
+    console.log("Fetching todos from DynamoDB...");gi
 
     const data = await dynamo.scan({
       TableName: "my-app-table",
@@ -71,7 +71,7 @@ app.delete("/api/todo/:id", async (req, res) => {
   }
 
   await dynamo.delete({
-    TableName: "todo-table",
+    TableName: "my-app-table",
     Key: { id },
   }).promise();
 
