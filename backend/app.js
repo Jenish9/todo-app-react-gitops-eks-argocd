@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const LOCAL_MODE = true; // 🔥 CHANGE THIS
+//const LOCAL_MODE = true; // 🔥 CHANGE THIS
 
 let todos = []; // local storage
 
