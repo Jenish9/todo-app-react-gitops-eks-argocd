@@ -31,7 +31,7 @@ app.post("/api/todo", async (req, res) => {
   res.send("Saved in DynamoDB");
 });
 
-// ✅ GET TODOS
+/* ✅ GET TODOS
 app.get("/api/todo", async (req, res) => {
   if (LOCAL_MODE) {
     return res.json(todos);
@@ -42,7 +42,24 @@ app.get("/api/todo", async (req, res) => {
   }).promise();
 
   res.json(data.Items);
+});*/
+app.get("/api/todo", async (req, res) => {
+  try {
+    console.log("Fetching todos from DynamoDB...");
+
+    const data = await dynamo.scan({
+      TableName: "my-app--table",
+    }).promise();
+
+    res.json(data.Items);
+
+  } catch (error) {
+    console.error("GET ERROR:", error);
+    res.status(500).json({ error: error.message });
+  }
 });
+
+
 
 // ✅ DELETE TODO
 app.delete("/api/todo/:id", async (req, res) => {
