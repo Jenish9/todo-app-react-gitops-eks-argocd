@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: todo-app
-          image: jenish48/todo-app-frontend:9d8abe60f0eaf760008a31bcd9970187bc289537
+          image: jenish48/todo-app-frontend:ef55c7515eb212ccc9c8d1bd2c537835e634a9ea
           imagePullPolicy: Always
           ports:
             - containerPort: 80
