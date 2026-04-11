@@ -26,10 +26,51 @@ module "storage" {
 
   bucket_name = "jenish-devops-app-2026"
   table_name  = "my-app-table"
+ // bucket_name = var.bucket_name
+ // table_name  = var.table_name
   environment = "production"
 }
 
 resource "aws_iam_policy" "backend_policy" {
+  name = "eks-backend-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:PutItem",
+          "dynamodb:GetItem",
+          "dynamodb:Scan",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem"
+        ]
+        Resource = module.storage.dynamodb_table_arn
+        //Resource = "${module.storage.s3_bucket_arn}/*"
+        // Resource = "arn:aws:dynamodb:ap-south-1:*:table/my-app-table"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject"
+        ]
+        Resource = "${module.storage.s3_bucket_arn}/*"
+        //Resource = "arn:aws:s3:::jenish-devops-app-2026/*"
+      },
+
+        {
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket"
+        ]
+        Resource = module.storage.s3_bucket_arn
+       }
+    ]
+  })
+}
+/*resource "aws_iam_policy" "backend_policy" {
   name = "eks-backend-policy"
 
   policy = jsonencode({
@@ -45,7 +86,7 @@ resource "aws_iam_policy" "backend_policy" {
       }
     ]
   })
-}
+}*/
 
 data "aws_iam_policy_document" "irsa_assume_role" {
   statement {
