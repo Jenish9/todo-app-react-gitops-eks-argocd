@@ -2,6 +2,7 @@ import express from "express";
 import AWS from "aws-sdk";
 import cors from "cors";
 
+console.log("NEW VERSION DEPLOYED");
 const app = express();
 app.use(express.json());
 app.use(cors());
