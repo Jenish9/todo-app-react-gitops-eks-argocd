@@ -1,7 +1,7 @@
 module "vpc" {
     source = "./modules/vpc"
     
-    name = "eks-vpc"
+    name = "eks-vpc-1"
     cidr = "10.0.0.0/16"
 
     azs = ["ap-south-1a" , "ap-south-1b"]
@@ -13,8 +13,8 @@ module "vpc" {
 module "eks" {
   source = "./modules/eks"
 
-  cluster_name  = "my-eks-cluster"   
-  cluster_version = "1.29"
+  cluster_name  = "my-eks-cluster-2"   
+  cluster_version = "1.34"
 
   vpc_id = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets

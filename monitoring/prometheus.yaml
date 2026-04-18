@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: k8s
+  namespace: monitoring
+spec:
+  replicas: 1
+  serviceAccountName: monitoring-kube-prometheus-prometheus
+  serviceMonitorSelector: {}
+  resources:
+    requests:
+      memory: 100Mi
+      cpu: 50m

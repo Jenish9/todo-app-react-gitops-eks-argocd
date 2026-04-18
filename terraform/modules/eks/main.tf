@@ -3,7 +3,7 @@ module "eks" {
    version = "~> 21.0"
 
   name    = var.cluster_name
-  kubernetes_version = "1.29"
+  kubernetes_version = "1.34"
   
   enable_irsa = true
   
@@ -37,7 +37,7 @@ module "eks" {
       max_size     = 3
       min_size     = 1
 
-      instance_types = ["t3.small"]
+      instance_types = ["t3.large"]
       iam_role_additional_policies = {
         AmazonEKS_CNI_Policy = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
       }

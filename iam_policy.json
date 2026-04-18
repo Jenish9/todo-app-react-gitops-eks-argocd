@@ -236,15 +236,6 @@
             "Resource": "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*"
         },
         {
-           "Effect": "Allow",
-           "Action": [
-                "dynamodb:PutItem",
-                "dynamodb:Scan",
-                "dynamodb:DeleteItem"
-            ],
-            "Resource": "arn:aws:dynamodb:ap-south-1:110643744382:table/todo-table"
-        },
-        {
             "Effect": "Allow",
             "Action": [
                 "elasticloadbalancing:SetWebAcl",
