@@ -86,7 +86,7 @@ class App extends Component {
     return (
       <Container>
         <Row style={{ textAlign: "center", fontSize: "2rem", fontWeight: "bold" }}>
-          TODO APP (DevOps Project 🚀)
+          TODO APP (DevOps Project )
         </Row>
 
         <hr />
